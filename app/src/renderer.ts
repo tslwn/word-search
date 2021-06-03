@@ -3,7 +3,7 @@ import './app.tsx';
 declare global {
   interface Window {
     api: {
-      search: (pattern: string) => Promise<string[]>;
+      search: (query: string) => Promise<string[]>;
     };
   }
 }

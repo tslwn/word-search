@@ -3,31 +3,31 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { useDebounce } from 'use-debounce';
 
-const MIN_PATTERN_LENGTH = 1;
+const MIN_QUERY_LENGTH = 3;
 const SEARCH_DELAY = 50;
 
 function App(): JSX.Element {
-  const [pattern, setPattern] = React.useState('');
+  const [query, setQuery] = React.useState('');
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setPattern(event.target.value);
+    setQuery(event.target.value);
   }
 
-  const [debouncedPattern] = useDebounce(pattern, SEARCH_DELAY);
+  const [debouncedQuery] = useDebounce(query, SEARCH_DELAY);
 
   const [matches, setMatches] = React.useState<string[]>();
 
   React.useEffect(() => {
     async function search() {
-      const response = await window.api.search(debouncedPattern);
+      const response = await window.api.search(debouncedQuery);
       setMatches(response);
     }
-    if (debouncedPattern.length >= MIN_PATTERN_LENGTH) {
+    if (debouncedQuery.length >= MIN_QUERY_LENGTH) {
       search();
     } else {
       setMatches([]);
     }
-  }, [debouncedPattern]);
+  }, [debouncedQuery]);
 
   return (
     <div className="w-full">
@@ -38,7 +38,7 @@ function App(): JSX.Element {
           onChange={handleChange}
           placeholder="Search"
           type="text"
-          value={pattern}
+          value={query}
         />
       </div>
       <div className="overflow-y-auto p-4 relative">

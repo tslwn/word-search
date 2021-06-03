@@ -2,8 +2,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-  search: (pattern) => {
-    ipcRenderer.send('search', pattern);
+  search: (query) => {
+    ipcRenderer.send('search', query);
 
     return new Promise((resolve) => {
       ipcRenderer.once('search-reply', (event, response) => resolve(response));

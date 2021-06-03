@@ -3,13 +3,13 @@ import { app, ipcMain, BrowserWindow } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const dictionary = 'dictionary.txt';
+import Dictionary from './Dictionary';
 
 const buffer = fs.readFileSync(
-  path.resolve(__dirname, '..', 'data', dictionary),
+  path.resolve(__dirname, '..', 'data', 'dictionary.txt'),
 );
 
-const { search } = require('native');
+const dictionary = new Dictionary(buffer);
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
@@ -42,6 +42,6 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('search', (event, pattern: string) => {
-  event.reply('search-reply', search(buffer, pattern));
+ipcMain.on('search', (event, query: string) => {
+  event.reply('search-reply', dictionary.search(query));
 });
